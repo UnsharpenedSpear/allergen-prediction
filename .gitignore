@@ -5,10 +5,6 @@ __pycache__/
 # Virtual environment
 venv/
 
-# Data
-data/raw/
-data/processed/
-data/features/
 
 # Models
 models/*.joblib
