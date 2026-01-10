@@ -13,7 +13,7 @@ def physiochemical_features(sequence: str) -> dict[str, float]:
     """
     analysis = ProteinAnalysis(sequence)
     features = {
-        "molecular_weight": molecular_weight(sequence),
+        "molecular_weight": molecular_weight(sequence, seq_type='protein'),
         "isoelectric_point": analysis.isoelectric_point(),
         "aromaticity": analysis.aromaticity(),
         "hydrophobicity": analysis.gravy(),
