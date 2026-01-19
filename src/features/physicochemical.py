@@ -1,7 +1,7 @@
 from Bio.SeqUtils import molecular_weight
 from Bio.SeqUtils.ProtParam import ProteinAnalysis
 
-def physiochemical_features(sequence: str) -> dict[str, float]:
+def physicochemical_features(sequence: str) -> dict[str, float]:
     """Calculate physiochemical features of a protein sequence.
 
     Args:
@@ -18,6 +18,7 @@ def physiochemical_features(sequence: str) -> dict[str, float]:
         "aromaticity": analysis.aromaticity(),
         "hydrophobicity": analysis.gravy(),
         "sequence_length": len(sequence),
+        "instability_index": analysis.instability_index()
     }
     
     return features

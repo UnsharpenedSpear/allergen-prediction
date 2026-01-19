@@ -1,4 +1,4 @@
-from src.features.physiochemical import physiochemical_features
+from src.features.physicochemical import physicochemical_features
 from src.features.aa_composition import aa_composition as amino_acid_composition_features
 import csv
 
@@ -8,6 +8,7 @@ FEATURE_COLUMNS = [
     "aromaticity",
     "hydrophobicity",
     "sequence_length",
+    "instability_index",
     "aa_A","aa_C","aa_D","aa_E","aa_F","aa_G","aa_H","aa_I","aa_K","aa_L",
     "aa_M","aa_N","aa_P","aa_Q","aa_R","aa_S","aa_T","aa_V","aa_W","aa_Y"
 ]
@@ -20,7 +21,7 @@ def build_feature_dataframe(input_csv: str, output_csv: str) -> None:
         
         fieldnames = reader.fieldnames + [
             'molecular_weight', 'isoelectric_point', 'aromaticity',
-            'hydrophobicity', 'sequence_length'
+            'hydrophobicity', 'sequence_length', 'instability_index'
         ] + [f'aa_comp_{aa}' for aa in "ACDEFGHIKLMNPQRSTVWY"]
 
         writer = csv.DictWriter(outfile, fieldnames=fieldnames)
@@ -28,8 +29,11 @@ def build_feature_dataframe(input_csv: str, output_csv: str) -> None:
         
         for row in reader:
             sequence = row['sequence']
-            physio_features = physiochemical_features(sequence)
+            physio_features = physicochemical_features(sequence)
             aa_comp_features = amino_acid_composition_features(sequence)
             row.update(physio_features)
             row.update({f'aa_comp_{k}': v for k, v in aa_comp_features.items()})
             writer.writerow(row)
+
+if __name__ == "__main__":
+    build_feature_dataframe('data/processed/dataset.csv', 'data/features/features.csv')
