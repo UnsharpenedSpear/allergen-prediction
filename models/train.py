@@ -1,4 +1,5 @@
 from sklearn.svm import LinearSVC
+from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report
 from sklearn.preprocessing import StandardScaler
@@ -30,6 +31,14 @@ def train_svm_classifier(X_train, y_train, C = 1.0,max_iter=2000):
     model.fit(X_train, y_train)
     return model
 
+def train_logistic_regression(X_train, y_train, C = 1.0, max_iter=2000):
+    # Increase allergen class weight to prioritize recall (screening use-case)
+    model = Pipeline([
+        ('scaler', StandardScaler()),
+        ('logreg', LogisticRegression(class_weight={0: 1, 1: 2},C=C, max_iter=max_iter, random_state=42))
+    ])
+    model.fit(X_train, y_train)
+    return model
 
 if __name__ == "__main__":
     dataset = pd.read_csv('data/features/features.csv')
@@ -39,7 +48,7 @@ if __name__ == "__main__":
 
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, stratify=y, random_state=42)
 
-    model = train_svm_classifier(X_train, y_train, C=0.5)
+    model = train_logistic_regression(X_train, y_train, C=0.5)
     
     y_pred = model.predict(X_test)
     report = classification_report(y_test, y_pred)
